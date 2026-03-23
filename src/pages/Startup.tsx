@@ -43,6 +43,23 @@ export default function Startup() {
     const [titleIndex, setTitleIndex] = useState(0)
 
     const startupStatus = useStore((state) => state.startupStatus)
+    const toolbarShortcut = usePersistedStore((state) => state.toolbarShortcut)
+
+    const shortcutDisplay = useMemo(() => {
+        const raw = toolbarShortcut ?? 'CmdOrCtrl+Shift+/'
+        return raw
+            .split('+')
+            .map((part) =>
+                part === 'CmdOrCtrl'
+                    ? platform() === 'macos'
+                        ? '⌘'
+                        : 'Ctrl'
+                    : part === 'Command'
+                      ? '⌘'
+                      : part
+            )
+            .join(' + ')
+    }, [toolbarShortcut])
 
     const isError = useMemo(
         () => startupStatus === 'error' || startupStatus === 'fatal',
@@ -110,8 +127,7 @@ export default function Startup() {
                                 exit={{ opacity: 0 }}
                                 className="ml-2 text-2xl"
                             >
-                                Use the {platform() === 'macos' ? '⌘' : 'Ctrl'} + Shift + / shortcut
-                                to open the Toolbar!
+                                Use the {shortcutDisplay} shortcut to open the Toolbar!
                             </motion.p>
                         )}
                         {startupStatus === 'updated' && (

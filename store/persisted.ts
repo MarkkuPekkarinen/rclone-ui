@@ -390,9 +390,11 @@ export const usePersistedStore = create<PersistedStateV2>()(
     )
 )
 
-// useStore.persist.onFinishHydration(() => {
-//     console.log('onFinishHydration')
-// })
+usePersistedStore.persist.onFinishHydration((state) => {
+    if (state.toolbarShortcut) {
+        invoke('update_toolbar_shortcut', { shortcut: state.toolbarShortcut })
+    }
+})
 
 store.onKeyChange('store', async (_) => {
     await usePersistedStore.persist.rehydrate()
