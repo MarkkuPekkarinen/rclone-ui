@@ -85,6 +85,17 @@ export default function Settings() {
         )
     }
 
+    const checkPassword = async () => {
+        if (passwordCheckInput === settingsPass) {
+            setPasswordCheckPassed(true)
+            return
+        }
+        await message('The password you entered is incorrect.', {
+            title: 'Login failed',
+            kind: 'error',
+        })
+    }
+
     if (settingsPass && !passwordCheckPassed) {
         return (
             <div className="flex flex-col items-center justify-center w-screen h-screen gap-4 overflow-hidden animate-fade-in">
@@ -92,6 +103,9 @@ export default function Settings() {
                     placeholder="Enter pin or password"
                     value={passwordCheckInput}
                     onChange={(e) => setPasswordCheckInput(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') checkPassword()
+                    }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect="off"
@@ -111,17 +125,7 @@ export default function Settings() {
                     }
                 />
                 <Button
-                    onPress={async () => {
-                        if (passwordCheckInput === settingsPass) {
-                            setPasswordCheckPassed(true)
-                            return
-                        }
-
-                        await message('The password you entered is incorrect.', {
-                            title: 'Login failed',
-                            kind: 'error',
-                        })
-                    }}
+                    onPress={checkPassword}
                     data-focus-visible="false"
                     color="primary"
                 >
