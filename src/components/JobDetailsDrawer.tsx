@@ -293,7 +293,7 @@ export default function JobDetailsDrawer({
                                         <Progress
                                             value={item.percentage}
                                             classNames={{
-                                                base: 'overflow-hidden rounded-full',
+                                                base: 'overflow-hidden rounded-full max-w-lg',
                                             }}
                                         />
                                     </Tooltip>
